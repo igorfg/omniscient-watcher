@@ -1,4 +1,5 @@
 import axios from "axios";
+import 'dotenv/config';
 import { ListRelation } from "../types/ListRelation";
 
 const baseUrl = 'https://api.mangadex.org';
@@ -9,17 +10,19 @@ const headers = {
 export const fetchMDList = async () => {
   const listId = process.env.MANGADEX_LIST_ID;
 
-  const resp = await axios({
-    method: 'GET',
-    url: `${baseUrl}/list/${listId}`,
-    params: {
-      includes: ['user'],
-    },
-    headers,
-  });
+  try {
+    const resp = await axios({
+      method: 'GET',
+      url: `${baseUrl}/list/${listId}`,
+      headers,
+    });
+    const relationships = resp.data.data.relationships;
+    return relationships.filter((relationship: ListRelation) => relationship.type === 'manga');
+  } catch (error) {
+    console.log(`Error fetching MDList`);
+    return [];
+  }
 
-  const relationships = resp.data.data.relationships;
-  return relationships.filter((relationship: ListRelation) => relationship.type === 'manga');
 };
 
 export const fetchLatestMDChapter = async (id: string) => {

@@ -25,7 +25,13 @@ const getLatestChapters = async (): Promise<MangaEntry[]> => {
 };
 
 const checkAndUpdateMangaEntries = async () => {
-  const latestChapters = await getLatestChapters();
+  let latestChapters: MangaEntry[] = [];
+
+  try {
+    latestChapters = await getLatestChapters();
+  } catch (error) {
+    console.log(`Error fetching latest chapters: ${error}`);
+  }
 
   latestChapters.forEach((chapter) => {
     const storedManga = getMangaById(chapter);
@@ -42,11 +48,15 @@ const checkAndUpdateMangaEntries = async () => {
       insertOrUpdateManga(chapter);
     }
   });
-}
+};
 
 const app = express();
 
 app.listen(5000, async () => {
   console.log("App is running!");
+
   await checkAndUpdateMangaEntries();
+  setInterval(() => {
+    checkAndUpdateMangaEntries();
+  }, 15 * 60 * 1000);
 });
