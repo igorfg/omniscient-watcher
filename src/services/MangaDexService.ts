@@ -14,6 +14,9 @@ export const fetchMDList = async () => {
     const resp = await axios({
       method: 'GET',
       url: `${baseUrl}/list/${listId}`,
+      params: {
+        includes: ['manga']
+      },
       headers,
     });
     const relationships = resp.data.data.relationships;
@@ -41,14 +44,4 @@ export const fetchLatestMDChapter = async (id: string) => {
   });
 
   return resp.data.data[0];
-};
-
-export const fetchMangaTitle = async (id: string) => {
-  const resp = await axios({
-    method: 'GET',
-    url: `${baseUrl}/manga/${id}`,
-    headers,
-  });
-
-  return resp.data.data.attributes.title;
 };
