@@ -1,6 +1,5 @@
 import axios from "axios";
 import { ListRelation } from "../types/ListRelation";
-import { Chapter } from "../types/Chapter";
 
 const baseUrl = 'https://api.mangadex.org';
 const headers = {
