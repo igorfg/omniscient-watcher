@@ -5,10 +5,10 @@ import { MangaEntry } from "../types/MangaEntry";
 const discordWebhookUrl = process.env.WEBHOOK_URL;
 
 export const sendChapterToDiscord = async (chapter: MangaEntry, isNewChapter: boolean) => {
-  const newChapterMessage = `New chapter available: ${chapter.url}`;
-  const newMangaMessage = `New manga being tracked: ${chapter.url}`;
+  const newChapterMessage = `New ${chapter.mangaTitle} chapter available: ${chapter.url}`;
+  const newMangaMessage = `${chapter.mangaTitle} is now being tracked: ${chapter.url}`;
 
-  const resp = await axios({
+  await axios({
     method: 'POST',
     url: discordWebhookUrl,
     data: {

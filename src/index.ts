@@ -1,6 +1,6 @@
 import express from "express";
 import { ListRelation } from "./types/ListRelation";
-import { fetchLatestMDChapter, fetchMDList } from "./services/MangaDexService";
+import { fetchLatestMDChapter, fetchMangaTitle, fetchMDList } from "./services/MangaDexService";
 import { Chapter } from "./types/Chapter";
 import { MangaEntry } from "./types/MangaEntry"
 import { insertOrUpdateManga, getMangaById } from "./db/Manga";
@@ -11,11 +11,13 @@ const getLatestChapters = async (): Promise<MangaEntry[]> => {
   
   return await Promise.all(mangaDexList.map( async (manga) => {
     const mangaDexChapter: Chapter = await fetchLatestMDChapter(manga.id);
+    const title = await fetchMangaTitle(manga.id);
     const { id } = mangaDexChapter;
     const { externalUrl, chapter } = mangaDexChapter.attributes;
 
     return {
       mangaDexId: manga.id,
+      mangaTitle: title.en,
       currentChapter: Number(chapter),
       url: externalUrl ?? `https://mangadex.org/chapter/${id}`,
     }
