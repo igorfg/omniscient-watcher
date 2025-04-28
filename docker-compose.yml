@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  omniscient-watcher:
+    build:
+      context: .          # Build from current directory
+      dockerfile: Dockerfile
+    container_name: omniscient-watcher
+    volumes:
+      - omniscient-watcher-data:/app/data    # Optional: Persist the SQLite DB
+    restart: unless-stopped             # Auto-restart if the container stops
+
+volumes:
+  manga-webhook-data:
