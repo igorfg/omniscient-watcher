@@ -6,14 +6,11 @@ WORKDIR /app
 # Install corepack
 RUN npm install -g corepack
 
-# Move project setup dependencies
-COPY package.json yarn.lock .yarnrc.yml .pnp.* ./
+# Copy files
+COPY . .
 
 # Install and run yarn
-RUN yarn -y
-
-# Copy remaining
-COPY . .
+RUN corepack enable && corepack prepare yarn@4.9.1 --activate && yarn
 
 # Create SQLITE DB
 RUN yarn init-db
