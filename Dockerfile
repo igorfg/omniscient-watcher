@@ -16,6 +16,5 @@ RUN corepack enable && corepack prepare yarn@4.9.1 --activate && yarn
 RUN yarn init-db
 
 # Dynamic environment generation at container start
-CMD sh -c "echo \"MANGADEX_LIST_ID=$MANGADEX_LIST_ID\" > .env && \
-           echo \"WEBHOOK_URL=$WEBHOOK_URL\" >> .env && \
+CMD sh -c "cp stack.env .env && \
            yarn dev"
