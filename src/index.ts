@@ -6,10 +6,13 @@ import { MangaEntry } from "./types/MangaEntry"
 import { insertOrUpdateManga, getMangaById } from "./db/Manga";
 import { sendChapterToDiscord } from "./services/DiscordService";
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 const getLatestChapters = async (): Promise<MangaEntry[]> => {
   const mangaDexList: ListRelation[] = await fetchMDList();
   
   return await Promise.all(mangaDexList.map( async (manga) => {
+    await delay(10_000);
     const mangaDexChapter: Chapter = await fetchLatestMDChapter(manga.id);
     const { id } = mangaDexChapter;
     const { externalUrl, chapter } = mangaDexChapter.attributes;
