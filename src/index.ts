@@ -9,8 +9,13 @@ import { sendChapterToDiscord } from "./services/DiscordService";
 const getLatestChapters = async (): Promise<MangaEntry[]> => {
   const mangaDexList: ListRelation[] = await fetchMDList();
   
-  return await Promise.all(mangaDexList.map( async (manga) => {
+  const mangaDexChapters =  await Promise.all(mangaDexList.map( async (manga) => {
     const mangaDexChapter: Chapter = await fetchLatestMDChapter(manga.id);
+
+    if (!mangaDexChapter) {
+      return null;
+    }
+
     const { id } = mangaDexChapter;
     const { externalUrl, chapter } = mangaDexChapter.attributes;
 
@@ -21,6 +26,8 @@ const getLatestChapters = async (): Promise<MangaEntry[]> => {
       url: externalUrl ?? `https://mangadex.org/chapter/${id}`,
     }
   }));
+
+  return mangaDexChapters.filter((chapter) => chapter !== null);
 };
 
 const checkAndUpdateMangaEntries = async () => {
